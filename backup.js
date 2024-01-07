@@ -108,3 +108,5 @@ setInterval(function(){
 
 // for (img in galleryImages) {
 //     console.log(img);
+// };
+
