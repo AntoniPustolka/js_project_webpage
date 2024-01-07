@@ -91,4 +91,21 @@ setInterval(function(){
 // !! Galery !!
 // src="./assets/gallery/image1.jpg" alt="Thumbnail Image 1"
 
-const 
+// const galleryImages = [
+//     {
+//         src: "./assets/gallery/image1.jpg",
+//         alt: "Thumbnail Image 1"
+//     },
+//     {
+//         src: "./assets/gallery/image2.jpg",
+//         alt: "Thumbnail Image 2"
+//     },
+//     {
+//         src: "./assets/gallery/image2.jpg",
+//         alt: "Thumbnail Image 2"
+//     }
+// ];
+
+// for (img in galleryImages) {
+//     console.log(img);
+// };
