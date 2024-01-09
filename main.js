@@ -1,3 +1,6 @@
+const weatherAPIKey = "17881f0accfcd73b721d0e5104377381";
+const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}`
+
 const galleryImages = [
   {
     src: "./assets/gallery/img1.png",
@@ -18,43 +21,43 @@ const galleryImages = [
 ];
 
 const product = [
-    {
-      title: "AstroFiction",
-      author: "John Doe",
-      price: 49.9,
-      image: "./assets/products/img6.png"
-    },
-    {
-      title: "Space Odissey",
-      author: "Marie Anne",
-      price: 35,
-      image: "./assets/products/img1.png"
-    },
-    {
-      title: "Doomed City",
-      author: "Jason Cobert",
-      price: 0,
-      image: "./assets/products/img2.png"
-    },
-    {
-      title: "Black Dog",
-      author: "John Doe",
-      price: 85.35,
-      image: "./assets/products/img3.png"
-    },
-    {
-      title: "My Little Robot",
-      author: "Pedro Paulo",
-      price: 0,
-      image: "./assets/products/img5.png"
-    },
-    {
-      title: "Garden Girl",
-      author: "Ankit Patel",
-      price: 45,
-      image: "./assets/products/img4.png"
-    }
-  ]
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 49.9,
+    image: "./assets/products/img6.png",
+  },
+  {
+    title: "Space Odissey",
+    author: "Marie Anne",
+    price: 35,
+    image: "./assets/products/img1.png",
+  },
+  {
+    title: "Doomed City",
+    author: "Jason Cobert",
+    price: 0,
+    image: "./assets/products/img2.png",
+  },
+  {
+    title: "Black Dog",
+    author: "John Doe",
+    price: 85.35,
+    image: "./assets/products/img3.png",
+  },
+  {
+    title: "My Little Robot",
+    author: "Pedro Paulo",
+    price: 0,
+    image: "./assets/products/img5.png",
+  },
+  {
+    title: "Garden Girl",
+    author: "Ankit Patel",
+    price: 45,
+    image: "./assets/products/img4.png",
+  },
+];
 
 // !! Menu Section !!
 function manuHandler() {
@@ -182,10 +185,9 @@ function clockHandler() {
 
 // ?? ForEach loop ??
 
-  /* <img src="./assets/gallery/image1.jpg" alt="Thumbnail Image 1" data-array-index="0" data-selected="true">
+/* <img src="./assets/gallery/image1.jpg" alt="Thumbnail Image 1" data-array-index="0" data-selected="true">
 <img src="./assets/gallery/image2.jpg" alt="Thumbnail Image 2" data-array-index="1" data-selected="false">
 <img src="./assets/gallery/image3.jpg" alt="Thumbnail Image 3" data-array-index="2" data-selected="false"> */
-
 
 // console.log(mainImage);
 function galleryHandler() {
@@ -235,73 +237,96 @@ function galleryHandler() {
    <p class="product-price">$ 49.90</p>
 </div>
 </div> */
+function populateProducts(productList) {
+  let productSection = document.querySelector(".products-area");
+  // Run a looop through the products and create an HTML element ("product-iteem") for each of them
+
+  productSection.textContent = "";
+
+  productList.forEach(function (product, index) {
+    // Create the HTML elements for the individual products
+    let productElm = document.createElement("div");
+    productElm.classList.add("product-item");
+
+    // Create product images
+    let productImage = document.createElement("img");
+    productImage.src = product.image;
+    productImage.alt = "Image for " + product.title;
+
+    // Create product details
+    let productDetails = document.createElement("div");
+    productDetails.classList.add("product-details");
+
+    // Create product title, author, price-title and price
+    let productTitle = document.createElement("h3");
+    productTitle.classList.add("product-title");
+    productTitle.textContent = product.title;
+
+    let productAuthor = document.createElement("p");
+    productAuthor.classList.add("product-author");
+    productAuthor.textContent = product.author;
+
+    let productPriceTitle = document.createElement("p");
+    productPriceTitle.classList.add("price-title");
+    productPriceTitle.textContent = "Price";
+
+    let productPrice = document.createElement("p");
+    productPrice.classList.add("price");
+    productPrice.textContent =
+      product.price == 0 ? "Free" : "$" + product.price.toFixed(2);
+
+    // Append product details
+    productDetails.append(productTitle);
+    productDetails.append(productAuthor);
+    productDetails.append(productPriceTitle);
+    productDetails.append(productPrice);
+
+    // Add all child HTML elements of the product
+    productElm.append(productImage);
+    productElm.append(productDetails);
+
+    // Add the complete individual product to the product section
+    productSection.append(productElm);
+  });
+}
 
 function productHandler() {
+  // products-filter
 
-    let productSection = document.querySelector(".products-area");
-    
-    // Run a looop through the products and create an HTML element ("product-iteem") for each of them
-    product.forEach(function (product, index) {
-         // Create the HTML elements for the individual products
-        let productElm = document.createElement("div");
-        productElm.classList.add("product-item");
+  let totalProducts = product.length;
 
-        // Create product images
-        let productImage = document.createElement("img");
-        productImage.src = product.image;
-        productImage.alt = "Image for " + product.title;
-        
-        // Create product details 
-        let productDetails = document.createElement("div");
-        productDetails.classList.add("product-details");
+  let totalPaid = product.filter(item => item.price > 0);
+  // console.log(totalPaid.length);
 
-        // Create product title, author, price-title and price
-        let productTitle = document.createElement("h3");
-        productTitle.classList.add('product-title');
-        productTitle.textContent = product.title;
-        
-        let productAuthor = document.createElement("p");
-        productAuthor.classList.add('product-author');
-        productAuthor.textContent = product.author;
+  let free = product.filter(item => !item.price || item.price <= 0);
 
-        let productPriceTitle = document.createElement("p");
-        productPriceTitle.classList.add('price-title');
-        productPriceTitle.textContent = "Price";   
+  populateProducts(product);
 
-        let productPrice = document.createElement("p");
-        productPrice.classList.add('price');
-        productPrice.textContent = product.price == 0 ? "Free" : "$" + product.price.toFixed(2);
+  document.querySelector(
+    ".products-filter label[for=free] span.product-amount"
+  ).textContent = free.length;
+  document.querySelector(
+    ".products-filter label[for=paid] span.product-amount"
+  ).textContent = totalPaid.length;
+  document.querySelector(
+    ".products-filter label[for=all] span.product-amount"
+  ).textContent = product.length;
 
-        // Append product details 
-        productDetails.append(productTitle);
-        productDetails.append(productAuthor);
-        productDetails.append(productPriceTitle)
-        productDetails.append(productPrice)
+  let productFilter = document.querySelector("div.products-filter");
+  productFilter.addEventListener("click", function (e) {
+    if (e.target.id === "all") {
+      populateProducts(product);
+    } else if (e.target.id === "paid") {
+      populateProducts(totalPaid);
+    } else if (e.target.id === "free") {
+      populateProducts(free);
+    }
+  });
+}
 
-        // Add all child HTML elements of the product
-        productElm.append(productImage);
-        productElm.append(productDetails);
-        
-        // Add the complete individual product to the product section
-        productSection.append(productElm);
-    });
-
-    // products-filter
-
-    // let totalProducts = product.length;
-    document.querySelector(".products-filter label[for=all] span.product-amount").textContent = product.length;
-
-    let totalPaid = product.filter(function(item) {
-        return item.price > 0; 
-    })
-    // console.log(totalPaid.length);
-    document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = totalPaid.length;
-
-    let free = product.filter(function(item) {
-        return !item.price || item.price <= 0; 
-    })
-
-    document.querySelector(".products-filter label[for=free] span.product-amount").textContent = free.length;
+function footerHandler() {
+    let currentYear = new Date().getFullYear();
+    document.querySelector("footer").textContent = `© ${currentYear} - ALl rights reserved`;
 }
 // let numbers = [1,3,4,5,5,6,7,4,2,6];
 
@@ -311,9 +336,39 @@ function productHandler() {
 
 // console.log(greaterThan4);
 
+// Geolocation
+// const open_api = `https://api.open-meteo.com/v1/forecast?latitude={lat}longitude={lon}hourly=temperature_2m`; 
+
+// navigator.geolocation.getCurrentPosition(position => {
+//     console.log(position);
+//     let latitude = position.coords.latitude;
+//     let longitude = position.coords.longitude;
+//     let URL = open_api
+//         .replace("{lat}",latitude.toFixed(2))
+//         .replace("{lon}",longitude.toFixed(2))
+//     fetch(URL)
+//     .then(response => response.json())
+//     .then(data => console.log(data));
+// })
+
+
+navigator.geolocation.getCurrentPosition(position => {
+    console.log(position);
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    let URL = weatherURL
+        .replace("{lat}",latitude)
+        .replace("{lon}",longitude)
+        .replace("{API key}",weatherAPIKey);
+    fetch(URL)
+    .then(response => response.json())
+    .then(data => console.log(data));
+})
+
 // Page Load
 manuHandler();
 greetingHandler();
 clockHandler();
 galleryHandler();
 productHandler();
+footerHandler();
