@@ -1,5 +1,8 @@
-const weatherAPIKey = "17881f0accfcd73b721d0e5104377381";
-const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}`
+
+const weatherURL = `https://api.tomorrow.io/v4/weather/forecast?location={lat},{lon}&apikey={API key}`;
+let weatherAPIKey = "6cOHZzzEFiQieivQ837knnxT0r9QXYAl";
+// console.log(APIKey);
+//  `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}`
 
 const galleryImages = [
   {
@@ -97,9 +100,9 @@ function greetingHandler() {
   }
 
   // const greetingText = "Good Day Darling";
-  const weatherCondition = "sunny";
-  const userLocation = "New York";
-  let temperature = 22.8221;
+  // const weatherCondition = "sunny";
+  // const userLocation = "New York";
+  // let temperature = 22.8221;
 
   let weatherText;
 
@@ -350,20 +353,52 @@ function footerHandler() {
 //     .then(response => response.json())
 //     .then(data => console.log(data));
 // })
+var requestOptions = {
+  method: 'GET',
+};
 
+// navigator.geolocation.getCurrentPosition(position => {
+//     // console.log(weatherAPIKey);
+//     let latitude = position.coords.latitude;
+//     let longitude = position.coords.longitude;
+//     let URL = weatherURL
+//         .replace("{lat}",latitude)
+//         .replace("{lon}",longitude)
+//         .replace("{API key}", weatherAPIKey)
+//     console.log(URL);
+//     fetch(URL)
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data);
+//       const weatherCondition = data.timelines.daily[0].values.humidityAvg;
+//       const userLocation = "New York";
+//       let temperature = data.timelines.daily[0].values.temperatureAvg;
+//       console.log(weatherCondition, userLocation, temperature);
+//     });
+// })
+
+
+var requestOptions = {
+  method: 'GET',
+};
+
+const geoapfiyURL = `https://api.geoapify.com/v1/geocode/reverse?lat={lat}&lon={lon}&apiKey={API key}`;
+let geoapfiyAPI = '732429ae42074f3894c7c52c7206a8ac';
 
 navigator.geolocation.getCurrentPosition(position => {
-    console.log(position);
+    // console.log(weatherAPIKey);
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-    let URL = weatherURL
+    let URL = geoapfiyURL
         .replace("{lat}",latitude)
         .replace("{lon}",longitude)
-        .replace("{API key}",weatherAPIKey);
+        .replace("{API key}", geoapfiyAPI)
+    console.log(URL);
     fetch(URL)
     .then(response => response.json())
-    .then(data => console.log(data));
-})
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+});
 
 // Page Load
 manuHandler();
