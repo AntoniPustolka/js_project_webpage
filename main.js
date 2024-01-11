@@ -338,7 +338,7 @@ function footerHandler() {
 const geopositionSearch = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
 const currentCondition =
   "http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}";
-const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
+const accuWeatherAPI = "";
 
 navigator.geolocation.getCurrentPosition((position) => {
   console.log(position);
