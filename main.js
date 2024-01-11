@@ -336,50 +336,54 @@ function footerHandler() {
 /// ACCUWEATHER API
 
 const geopositionSearch = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
-const currentCondition =
-  "http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}";
+const currentCondition ="http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}";
 const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
 let latitude = 0; 
 let longitude = 0;
 let URL1 = geopositionSearch;
 let URL2 = currentCondition;
+let locationKey = 0;
+let userLocation = '';
+let weatherText = '';
+let temp = 0;
 
 function getPosition() {
 navigator.geolocation.getCurrentPosition((position) => {
   console.log(position);
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  URL1
-    .replace("{lat}", latitude)
+  console.log(URL1);
+  let newUrl = URL1.replace("{lat}", latitude)
     .replace("{lon}", longitude)
     .replace("{API key}", accuWeatherAPI);
-  console.log(URL1);
-  fetch(URL1)
+  console.log(newUrl);
+  fetch(newUrl)
     .then(response => response.json())
     .then((data1) => {
       console.log(data1);
       let locationKey = data1.Key;
       let userLocation = data1.EnglishName;
       console.log(locationKey, userLocation);
+      return locationKey, userLocation;
     });
 });
 }
 
 function getCurrentCondition(){
-      URL2
-        .replace("{locationKey}", data1.Key)
+      let updatedUrl = URL2.replace("{locationKey}", locationKey)
         .replace("{API key}", accuWeatherAPI);
-      console.log(URL2);
-      fetch(URL2)
+      console.log(updatedUrl);
+      fetch(updatedUrl)
         .then((response) => response.json())
         .then((data2) => {
           console.log(data2);
-          let weatherText = data2.WeatherText;
-          let temp = data2.Temperature.Metric.Value;
+          weatherText = data2.WeatherText;
+          temp = data2.Temperature.Metric.Value;
           console.log(weatherText, temp);
+          return weatherText, temp;
       });
   }
-// http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C16.8513828
+http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C16.8513828
 // http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C16.8513828
 // // https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C%16.8513828&details=true&toplevel=true
 
