@@ -338,48 +338,47 @@ function footerHandler() {
 const geopositionSearch = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
 const currentCondition =
   "http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}";
-const accuWeatherAPI = "";
+const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
+let latitude = 0; 
+let longitude = 0;
+let URL1 = geopositionSearch;
+let URL2 = currentCondition;
 
+function getPosition() {
 navigator.geolocation.getCurrentPosition((position) => {
   console.log(position);
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  let URL2 = currentCondition;
-  let URL1 = geopositionSearch
+  URL1
     .replace("{lat}", latitude)
     .replace("{lon}", longitude)
     .replace("{API key}", accuWeatherAPI);
   console.log(URL1);
-  const request1 = fetch(URL1)
+  fetch(URL1)
     .then(response => response.json())
     .then((data1) => {
       console.log(data1);
       let locationKey = data1.Key;
       let userLocation = data1.EnglishName;
       console.log(locationKey, userLocation);
-      let URL2 = currentCondition
+    });
+});
+}
+
+function getCurrentCondition(){
+      URL2
         .replace("{locationKey}", data1.Key)
         .replace("{API key}", accuWeatherAPI);
-      console.log(URL2)
-      return URL2;
-    })
-    const request2 = fetch(URL2)
+      console.log(URL2);
+      fetch(URL2)
         .then((response) => response.json())
         .then((data2) => {
           console.log(data2);
           let weatherText = data2.WeatherText;
           let temp = data2.Temperature.Metric.Value;
           console.log(weatherText, temp);
-        });
-
-    Promise.all([request1, request2])
-        .then(([data1, data2]) => {
-          console.log(data1, data2);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    });
+      });
+  }
 // http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C16.8513828
 // http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C16.8513828
 // // https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=t7uryi24HH0MYjzBPi94qWYlEDFBPUGq&q=51.1387316%2C%16.8513828&details=true&toplevel=true
@@ -474,3 +473,5 @@ clockHandler();
 galleryHandler();
 productHandler();
 footerHandler();
+getPosition();
+getCurrentCondition();
