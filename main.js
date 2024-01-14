@@ -336,29 +336,50 @@ function footerHandler() {
 const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
 let URL1 = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
 let URL2 = `http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}`;
-let locationKey = 0;
+// let locationKey = 0;
 let userLocation = '';
 let weatherText = '';
 let temp = 0;
 let latitude = 0;
 let longitude = 0;
 let newUrl = '';
+let locationKey
 
 function getPosition() {
 navigator.geolocation.getCurrentPosition(position => {
 //   console.log(position);
   latitude = position.coords.latitude;
   longitude = position.coords.longitude;
-  URL1 = URL1.replace("{lat}", latitude)
+  let newURL = URL1
+    .replace("{lat}", latitude)
     .replace("{lon}", longitude)
     .replace("{API key}", accuWeatherAPI);
-  console.log(URL1);
-//   return latitude, longitude, URL1;
+    fetch(newURL)
+    .then(response => response.json())
+    .then(function(data){
+      console.log(data);
+      locationKey = data.Key;
+      userLocation = data.EnglishName;
+      console.log(locationKey);
+      return locationKey;
+    }).then(function(locationKey) {
+        console.log(locationKey);
+        let updatedUrl = URL2.replace("{locationKey}", locationKey)
+        .replace("{API key}", accuWeatherAPI);
+      console.log(updatedUrl);
+      fetch(updatedUrl)
+        .then(response => response.json())
+        .then(function(data) {
+          console.log(data);
+          weatherText = data[0].WeatherText;
+          temp = data[0].Temperature.Metric.Value;
+          console.log(weatherText, temp, userLocation);
+          return weatherText, temp;
+      });
+
+    });
 });
 }
-
-console.log(latitude);
-console.log(URL1);
 
 // function getLocationKey() {
 //   fetch(URLv1)
