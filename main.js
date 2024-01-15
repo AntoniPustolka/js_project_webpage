@@ -337,19 +337,19 @@ const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
 let URL1 = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
 let URL2 = `http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}`;
 // let locationKey = 0;
-let userLocation = '';
-let weatherText = '';
-let temp = 0;
-let latitude = 0;
-let longitude = 0;
-let newUrl = '';
-let locationKey
+// let userLocation = '';
+// // let weatherText = '';
+// // let temp = 0;
+// let latitude = 0;
+// let longitude = 0;
+// let newUrl = '';
+// let locationKey
 
 function getPosition() {
 navigator.geolocation.getCurrentPosition(position => {
 //   console.log(position);
-  latitude = position.coords.latitude;
-  longitude = position.coords.longitude;
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
   let newURL = URL1
     .replace("{lat}", latitude)
     .replace("{lon}", longitude)
@@ -358,10 +358,10 @@ navigator.geolocation.getCurrentPosition(position => {
     .then(response => response.json())
     .then(function(data){
       console.log(data);
-      locationKey = data.Key;
-      userLocation = data.EnglishName;
-      console.log(locationKey);
-      return locationKey;
+      const locationKey = data.Key;
+      const userLocation = data.EnglishName;
+      console.log(userLocation, locationKey);
+      return userLocation, locationKey;
     }).then(function(locationKey) {
         console.log(locationKey);
         let updatedUrl = URL2.replace("{locationKey}", locationKey)
@@ -371,9 +371,9 @@ navigator.geolocation.getCurrentPosition(position => {
         .then(response => response.json())
         .then(function(data) {
           console.log(data);
-          weatherText = data[0].WeatherText;
-          temp = data[0].Temperature.Metric.Value;
-          console.log(weatherText, temp, userLocation);
+          const weatherText = data[0].WeatherText;
+          let temp = data[0].Temperature.Metric.Value;
+          console.log(weatherText, temp);
           return weatherText, temp;
       });
 
@@ -465,7 +465,7 @@ navigator.geolocation.getCurrentPosition(position => {
 // navigator.geolocation.getCurrentPosition(position => {
 //     // console.log(weatherAPIKey);
 //     let latitude = position.coords.latitude;
-//     let longitude = position.coords.longitude;
+//     let longitude =u position.coords.longitude;
 //     let URL = geoapfiyURL
 //         .replace("{lat}",latitude)
 //         .replace("{lon}",longitude)
