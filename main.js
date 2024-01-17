@@ -3,6 +3,8 @@
 // console.log(APIKey);
 //  `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}`
 
+// const { userInfo } = require("os");
+
 const galleryImages = [
   {
     src: "./assets/gallery/img1.png",
@@ -84,9 +86,8 @@ function celsiusToFahr(temp) {
 
 // !! Greeting Section !!
 function greetingHandler() {
-  let currentHour = 10;
-  new Date().getHours();
-  // console.log(currentHour);
+  let currentHour = new Date().getHours();
+  console.log(currentHour);
   let greetingText;
   if (currentHour < 12) {
     greetingText = "Good Morning";
@@ -96,37 +97,103 @@ function greetingHandler() {
     greetingText = "Good Evening";
   } else {
     greetingText = "Welcome!";
-  }
+  };
+
+  document.querySelector("#greeting").innerHTML = greetingText;
+}
+
+// Weather text 
+
+const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
+let URL1 = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
+let URL2 = `http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}`;
+// let locationKey = 0;
+// let userLocation = '';
+// // let weatherText = '';
+// // let temp = 0;
+// let latitude = 0;
+// let longitude = 0;
+// let newUrl = '';
+// let locationKey
+let userLocation;
+
+function getPosition() {
+navigator.geolocation.getCurrentPosition(position => {
+//   console.log(position);
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  let newURL = URL1
+    .replace("{lat}", latitude)
+    .replace("{lon}", longitude)
+    .replace("{API key}", accuWeatherAPI);
+    fetch(newURL)
+    .then(response => response.json())
+    .then(function(data){
+      const locationKey = data.Key;
+      userLocation = data.EnglishName;
+      return userLocation, locationKey;
+    }).then(function(locationKey) {
+        // console.log(locationKey);
+        let updatedUrl = URL2.replace("{locationKey}", locationKey)
+        .replace("{API key}", accuWeatherAPI);
+      fetch(updatedUrl)
+        .then(response => response.json())
+        .then(function(data, userLocation) {
+          const weatherCondition = data[0].WeatherText;
+          const temp = data[0].Temperature.Metric.Value;
+          
+          console.log(weatherCondition, temp);
+          document
+          .querySelector(".weather-group")
+          .addEventListener("click", function (event) {
+            if (event.target.id == "celsius") {
+              const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${temp.toFixed()}°C outside.`;
+              console.log(weatherText + "1")
+              document.querySelector("p#weather").innerHTML = weatherText;
+            } else {
+              const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${celsiusToFahr(
+                temp)
+                .toFixed()}°F outside.`;
+              console.log(weatherText + "2");
+              document.querySelector("p#weather").innerHTML = weatherText;
+            }
+          });
+      
+        
+      });
+    });
+  });
+}
 
   // const greetingText = "Good Day Darling";
   // const weatherCondition = "sunny";
   // const userLocation = "New York";
   // let temperature = 22.8221;
 
-  let weatherText;
+  // let weatherText;
 
   // alert("The temperature outside is " + celsiusToFahr(temperature) + "°F outside.")
   // console.log(weatherText); (event.target.id) === "celsius"
   // !! Farh to Celsius => Redio Buttons !!
 
-  document
-    .querySelector(".weather-group")
-    .addEventListener("click", function (event) {
-      if (event.target.id == "celsius") {
-        weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${temperature.toFixed()}°C outside.`;
-        // console.log(weatherText + "1")
-        document.querySelector("p#weather").innerHTML = weatherText;
-      } else {
-        weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${celsiusToFahr(
-          temperature
-        ).toFixed()}°F outside.`;
-        // §console.log(weatherText + "2");
-        document.querySelector("p#weather").innerHTML = weatherText;
-      }
-    });
+//   document
+//     .querySelector(".weather-group")
+//     .addEventListener("click", function (event) {
+//       if (event.target.id == "celsius") {
+//         const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${temperature.toFixed()}°C outside.`;
+//         // console.log(weatherText + "1")
+//         document.querySelector("p#weather").innerHTML = weatherText;
+//       } else {
+//         const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${celsiusToFahr(
+//           temperature
+//         ).toFixed()}°F outside.`;
+//         // §console.log(weatherText + "2");
+//         document.querySelector("p#weather").innerHTML = weatherText;
+//       }
+//     });
 
-  document.querySelector("#greeting").innerHTML = greetingText;
-}
+//   document.querySelector("#greeting").innerHTML = greetingText;
+// }
 // !! Clock !!
 
 //  new Date().getHours();
@@ -333,54 +400,6 @@ function footerHandler() {
 
 /// ACCUWEATHER API
 
-const accuWeatherAPI = "t7uryi24HH0MYjzBPi94qWYlEDFBPUGq";
-let URL1 = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey={API key}&q={lat}%2C{lon}`;
-let URL2 = `http://dataservice.accuweather.com/currentconditions/v1/{locationKey}?apikey={API key}`;
-// let locationKey = 0;
-// let userLocation = '';
-// // let weatherText = '';
-// // let temp = 0;
-// let latitude = 0;
-// let longitude = 0;
-// let newUrl = '';
-// let locationKey
-
-function getPosition() {
-navigator.geolocation.getCurrentPosition(position => {
-//   console.log(position);
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  let newURL = URL1
-    .replace("{lat}", latitude)
-    .replace("{lon}", longitude)
-    .replace("{API key}", accuWeatherAPI);
-    fetch(newURL)
-    .then(response => response.json())
-    .then(function(data){
-      console.log(data);
-      const locationKey = data.Key;
-      const userLocation = data.EnglishName;
-      console.log(userLocation, locationKey);
-      return userLocation, locationKey;
-    }).then(function(locationKey) {
-        console.log(locationKey);
-        let updatedUrl = URL2.replace("{locationKey}", locationKey)
-        .replace("{API key}", accuWeatherAPI);
-      console.log(updatedUrl);
-      fetch(updatedUrl)
-        .then(response => response.json())
-        .then(function(data) {
-          console.log(data);
-          const weatherText = data[0].WeatherText;
-          let temp = data[0].Temperature.Metric.Value;
-          console.log(weatherText, temp);
-          return weatherText, temp;
-      });
-
-    });
-});
-}
-
 // function getLocationKey() {
 //   fetch(URLv1)
 //     .then(response => response.json())
@@ -480,6 +499,7 @@ navigator.geolocation.getCurrentPosition(position => {
 // Page Load
 manuHandler();
 greetingHandler();
+getPosition();
 clockHandler();
 galleryHandler();
 productHandler();
