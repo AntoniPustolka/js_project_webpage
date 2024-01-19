@@ -141,25 +141,25 @@ navigator.geolocation.getCurrentPosition(position => {
         .then(function(data, userLocation) {
           const weatherCondition = data[0].WeatherText;
           const temp = data[0].Temperature.Metric.Value;
-          
+                 
+          const celsiusText = `The weather is ${weatherCondition} in ${userLocation} and it's ${temp.toFixed()}°C outside.`;
+          const fahrText = `The weather is ${weatherCondition} in ${userLocation} and it's ${celsiusToFahr(temp).toFixed()}°F outside.`;
+
+          document.querySelector("p#weather").innerHTML = celsiusText;
+
           console.log(weatherCondition, temp);
           document
-          .querySelector(".weather-group")
-          .addEventListener("click", function (event) {
+          .querySelector(".weather-group").addEventListener("click", function (event) {
             if (event.target.id == "celsius") {
-              const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${temp.toFixed()}°C outside.`;
-              console.log(weatherText + "1")
-              document.querySelector("p#weather").innerHTML = weatherText;
-            } else {
-              const weatherText = `The weather is ${weatherCondition} in ${userLocation} and it's ${celsiusToFahr(
-                temp)
-                .toFixed()}°F outside.`;
-              console.log(weatherText + "2");
-              document.querySelector("p#weather").innerHTML = weatherText;
+              document.querySelector("p#weather").innerHTML = celsiusText;
+            } else if (event.target.id == "fahr") {
+              document.querySelector("p#weather").innerHTML = fahrText;
             }
           });
-      
-        
+          
+          })
+          .catch(err => {
+            document.querySelector("p#weather").innerHTML = "Error getthing the weather temperature. Please refresh the page";    
       });
     });
   });
