@@ -115,7 +115,7 @@ let URL2 = `http://dataservice.accuweather.com/currentconditions/v1/{locationKey
 // let longitude = 0;
 // let newUrl = '';
 // let locationKey
-let userLocation;
+// let userLocation;
 
 function getPosition() {
 navigator.geolocation.getCurrentPosition(position => {
@@ -130,15 +130,13 @@ navigator.geolocation.getCurrentPosition(position => {
     .then(response => response.json())
     .then(function(data){
       const locationKey = data.Key;
-      userLocation = data.EnglishName;
-      return userLocation, locationKey;
-    }).then(function(locationKey) {
-        // console.log(locationKey);
-        let updatedUrl = URL2.replace("{locationKey}", locationKey)
+      let userLocation = data.EnglishName;
+      console.log(userLocation, locationKey);
+      let updatedUrl = URL2.replace("{locationKey}", locationKey)
         .replace("{API key}", accuWeatherAPI);
-      fetch(updatedUrl)
+      return fetch(updatedUrl)
         .then(response => response.json())
-        .then(function(data, userLocation) {
+        .then(function(data) {
           const weatherCondition = data[0].WeatherText;
           const temp = data[0].Temperature.Metric.Value;
                  
